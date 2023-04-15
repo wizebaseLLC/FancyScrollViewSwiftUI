@@ -6,6 +6,7 @@ public struct FancyScrollView: View {
     let headerHeight: CGFloat
     let scrollUpHeaderBehavior: ScrollUpHeaderBehavior
     let scrollDownHeaderBehavior: ScrollDownHeaderBehavior
+    let onClose: () -> Void
     let header: AnyView?
     let content: AnyView
 
@@ -16,6 +17,7 @@ public struct FancyScrollView: View {
                                  headerHeight: headerHeight,
                                  scrollUpBehavior: scrollUpHeaderBehavior,
                                  scrollDownBehavior: scrollDownHeaderBehavior,
+                                 onClose: onClose,
                                  header: header,
                                  content: content)
             )
@@ -50,6 +52,7 @@ extension FancyScrollView {
                                   headerHeight: CGFloat = 300,
                                   scrollUpHeaderBehavior: ScrollUpHeaderBehavior = .parallax,
                                   scrollDownHeaderBehavior: ScrollDownHeaderBehavior = .offset,
+                                  onClose: @escaping () -> Void,
                                   header: () -> A?,
                                   content: () -> B) {
 
@@ -57,6 +60,7 @@ extension FancyScrollView {
                   headerHeight: headerHeight,
                   scrollUpHeaderBehavior: scrollUpHeaderBehavior,
                   scrollDownHeaderBehavior: scrollDownHeaderBehavior,
+                  onClose: onClose,
                   header: AnyView(header()),
                   content: AnyView(content()))
     }
@@ -65,12 +69,14 @@ extension FancyScrollView {
                          headerHeight: CGFloat = 300,
                          scrollUpHeaderBehavior: ScrollUpHeaderBehavior = .parallax,
                          scrollDownHeaderBehavior: ScrollDownHeaderBehavior = .offset,
+                         onClose: @escaping () -> Void,
                          content: () -> A) {
 
            self.init(title: title, titleColor: titleColor,
                      headerHeight: headerHeight,
                      scrollUpHeaderBehavior: scrollUpHeaderBehavior,
                      scrollDownHeaderBehavior: scrollDownHeaderBehavior,
+                     onClose: onClose,
                      header: nil,
                      content: AnyView(content()))
        }

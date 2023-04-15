@@ -5,7 +5,8 @@ struct HeaderScrollViewTitle: View {
     let titleColor: Color
     let height: CGFloat
     let largeTitle: Double
-
+    let onClose: () -> Void
+    
     var body: some View {
         let largeTitleOpacity = (max(largeTitle, 0.5) - 0.5) * 2
         let tinyTitleOpacity = 1 - min(largeTitle, 0.5) * 2
@@ -25,7 +26,7 @@ struct HeaderScrollViewTitle: View {
 
             ZStack {
                 HStack {
-                    BackButton(color: .primary)
+                    BackButton(onClose: onClose)
                     Spacer()
                 }
                 HStack {

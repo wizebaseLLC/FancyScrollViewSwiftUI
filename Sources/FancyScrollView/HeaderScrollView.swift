@@ -5,15 +5,16 @@ private let navigationBarHeight: CGFloat = 44
 struct HeaderScrollView: View {
     @Environment(\.colorScheme)
     private var colorScheme: ColorScheme
-
+    
     let title: String
     let titleColor: Color
     let headerHeight: CGFloat
     let scrollUpBehavior: ScrollUpHeaderBehavior
     let scrollDownBehavior: ScrollDownHeaderBehavior
+    let onClose: () -> Void
     let header: AnyView
     let content: AnyView
-
+    
     var body: some View {
         GeometryReader { globalGeometry in
             ScrollView {
@@ -29,7 +30,7 @@ struct HeaderScrollView: View {
                         )
                     }
                     .frame(width: globalGeometry.size.width, height: self.headerHeight)
-
+                    
                     GeometryReader { geometry -> AnyView in
                         let geometry = self.geometry(from: geometry, safeArea: globalGeometry.safeAreaInsets)
                         return AnyView(
@@ -37,18 +38,22 @@ struct HeaderScrollView: View {
                                 BlurView()
                                     .opacity(1 - sqrt(geometry.largeTitleWeight))
                                     .offset(y: geometry.blurOffset)
-
+                                
                                 VStack {
                                     geometry.largeTitleWeight == 1 ? HStack {
-                                        BackButton(color: .white)
+                                        BackButton(onClose: onClose)
                                         Spacer()
                                     }.frame(width: geometry.width, height: navigationBarHeight) : nil
-
+                                    
                                     Spacer()
-
-                                    HeaderScrollViewTitle(title: self.title, titleColor: self.titleColor,
-                                                          height: navigationBarHeight,
-                                                          largeTitle: geometry.largeTitleWeight).layoutPriority(1000)
+                                    
+                                    HeaderScrollViewTitle(
+                                        title: self.title,
+                                        titleColor: self.titleColor,
+                                        height: navigationBarHeight,
+                                        largeTitle: geometry.largeTitleWeight,
+                                        onClose: onClose
+                                    ).layoutPriority(1000)
                                 }
                                 .padding(.top, globalGeometry.safeAreaInsets.top)
                                 .frame(width: geometry.width, height: max(geometry.elementsHeight, navigationBarHeight))
@@ -59,7 +64,7 @@ struct HeaderScrollView: View {
                     .frame(width: globalGeometry.size.width, height: self.headerHeight)
                     .zIndex(1000)
                     .offset(y: -self.headerHeight)
-
+                    
                     self.content
                         .background(Color.background(colorScheme: self.colorScheme))
                         .offset(y: -self.headerHeight)
@@ -75,7 +80,7 @@ struct HeaderScrollView: View {
 }
 
 extension HeaderScrollView {
-
+    
     private struct HeaderScrollViewGeometry {
         let width: CGFloat
         let headerHeight: CGFloat
@@ -85,23 +90,23 @@ extension HeaderScrollView {
         let elementsOffset: CGFloat
         let largeTitleWeight: Double
     }
-
+    
     private func geometry(from geometry: GeometryProxy, safeArea: EdgeInsets) -> HeaderScrollViewGeometry {
         let minY = geometry.frame(in: .global).minY
         let hasScrolledUp = minY > 0
         let hasScrolledToMinHeight = -minY >= headerHeight - navigationBarHeight - safeArea.top
-
+        
         let headerHeight = hasScrolledUp && self.scrollUpBehavior == .parallax ?
-            geometry.size.height + minY : geometry.size.height
-
+        geometry.size.height + minY : geometry.size.height
+        
         let elementsHeight = hasScrolledUp && self.scrollUpBehavior == .sticky ?
-            geometry.size.height : geometry.size.height + minY
-
+        geometry.size.height : geometry.size.height + minY
+        
         let headerOffset: CGFloat
         let blurOffset: CGFloat
         let elementsOffset: CGFloat
         let largeTitleWeight: Double
-
+        
         if hasScrolledUp {
             headerOffset = -minY
             blurOffset = -minY
@@ -119,7 +124,7 @@ extension HeaderScrollView {
             let difference = self.headerHeight - navigationBarHeight - safeArea.top + minY
             largeTitleWeight = difference <= navigationBarHeight + 1 ? Double(difference / (navigationBarHeight + 1)) : 1
         }
-
+        
         return HeaderScrollViewGeometry(width: geometry.size.width,
                                         headerHeight: headerHeight,
                                         elementsHeight: elementsHeight,
@@ -128,11 +133,11 @@ extension HeaderScrollView {
                                         elementsOffset: elementsOffset,
                                         largeTitleWeight: largeTitleWeight)
     }
-
+    
 }
 
 extension Color {
-
+    
     static func background(colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .dark:
@@ -143,5 +148,5 @@ extension Color {
             return .white
         }
     }
-
+    
 }

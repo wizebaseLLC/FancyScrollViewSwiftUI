@@ -1,5 +1,9 @@
 # FancyScrollView
 
+# THIS IS A FORK FROM https://github.com/nerdsupremacist/FancyScrollView.
+## All props go to the originator.
+
+# This fork adds an onClose callback, which allows you to say what happens when you press the back button.
 ![](Demo/FancyScrollView.gif)
 
 I spent a lot of time looking for a way to recreate the UI of the ScrollViews in Stock Apple Apps (i.e. App Store and Apple Music) inside of SwiftUI.

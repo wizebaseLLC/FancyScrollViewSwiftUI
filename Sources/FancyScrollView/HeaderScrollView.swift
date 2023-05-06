@@ -56,6 +56,7 @@ struct HeaderScrollView: View {
                                     ).layoutPriority(1000)
                                 }
                                 .padding(.top, globalGeometry.safeAreaInsets.top)
+                                .padding(.bottom, 4)
                                 .frame(width: geometry.width, height: max(geometry.elementsHeight, navigationBarHeight))
                                 .offset(y: geometry.elementsOffset)
                             }

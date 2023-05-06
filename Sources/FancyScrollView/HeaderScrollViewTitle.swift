@@ -17,10 +17,12 @@ struct HeaderScrollViewTitle: View {
                     .foregroundColor(titleColor)
                     .fontWeight(.black)
                     .padding(.horizontal, 16)
+                    .lineLimit(5)
+                    .shadow(color: .black, radius: 3)
 
                 Spacer()
             }
-            .padding(.bottom, 8)
+            .padding(.bottom)
             .opacity(sqrt(largeTitleOpacity))
             .minimumScaleFactor(0.5)
 
